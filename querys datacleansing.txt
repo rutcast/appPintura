@@ -1,0 +1,370 @@
+select date("createdAt"), count(0) 
+from drive_app."Jobs"
+group by date("createdAt")
+order by 1 desc
+
+
+select "created",to_timestamp(CAST("created" as bigint)/1000),
+to_timestamp(CAST("created" as bigint)/1000) - INTERVAL '3 day' , 
+extract(epoch from to_timestamp(CAST("created" as bigint)/1000)- INTERVAL '3 day') 
+ from drive_app."Jobs"
+where date("createdAt") = '2020-11-04'
+
+select * from drive_app."Jobs"
+where date("createdAt") = '2020-11-04'
+
+update  drive_app."Jobs" set "created" ='1604469600000'
+where date("createdAt") = '2020-11-04'
+commit
+
+select "created",to_timestamp(CAST("created" as bigint)/1000) 
+from   drive_app."Jobs"
+group by  "created",to_timestamp(CAST("created" as bigint)/1000)
+
+select * from drive_app."vwSchedules"
+where  date("createdAt") = '2020-11-04'
+
+select sc."codigo", jb.id from drive_app."Jobs" jb join drive_app."vwSchedules" sc on cast(jb."StoreId" as varchar) = sc.idstore
+and jb."ScheduleId" = sc."id" and date(sc."createdAt") = '2020-11-04'  
+
+
+select distinct "created",to_timestamp(CAST("created" as bigint)/1000)  
+from drive_app."Jobs" jb join drive_app."vwSchedules" sc on cast(jb."StoreId" as varchar) = sc.idstore
+and jb."ScheduleId" = sc."id" and date(sc."createdAt") = '2020-11-04' 
+
+
+73
+
+
+
+
+select to_timestamp(CAST(1604469600000 as bigint)/1000)
+
+update drive_app."Jobs" set "created" = '1604469600000', "createdAt" = "createdAt"  - INTERVAL '6 day',
+"updatedAt"   = "updatedAt"  - INTERVAL '6 day'
+where "id" in
+('159',
+'163',
+'152',
+'202',
+'154',
+'167',
+'146',
+'185',
+'214',
+'208',
+'203',
+'201',
+'199',
+'187',
+'186',
+'181',
+'179',
+'177',
+'172',
+'171',
+'170',
+'169',
+'168',
+'165',
+'164',
+'162',
+'155',
+'151',
+'147',
+'217',
+'218')
+commit
+
+select  distinct "created",to_timestamp(CAST("created" as bigint)/1000), 
+"createdAt"  - INTERVAL '6 day', "updatedAt"  - INTERVAL '6 day'
+from drive_app."Jobs" 
+
+1604469600
+
+select st."code", jb.id, jb.created, jb.active, jb.completed, jb.reescheduled, jb."createdAt", jb."updatedAt", 
+jb."ScheduleId", jb."StoreId", pa.base, pa.altura, npa.base, npa.altura, tm."EmployeeCode",
+(cast(pa.base as decimal) * cast(pa.altura as decimal))- (cast(npa.base as decimal) * cast(npa.altura as decimal)) mt2
+from  drive_app."Jobs" jb join drive_app."Stores" st on jb."StoreId"= st."id"
+join drive_app."vwSchedules" sc on jb."ScheduleId" = sc.id
+join  drive_app."Teams" tm on sc."TeamId" = tm.id
+left join drive_app."PaintedArea" pa on jb.id = pa.id
+left join drive_app."NPaintedArea" npa on jb.id = npa.id
+
+select * from drive_app."Jobs" where "structureP" is not null
+limit 5
+
+select * from drive_app."vwSchedules"
+
+
+select * from drive_app."Teams"
+
+select * from drive_app."Employees"
+
+select * from drive_app.resposables
+
+select * 
+from drive_app."Jobs" 
+where "StoreId" ='1552'
+
+
+select id ,active, completed, reescheduled,to_timestamp(CAST("created" as bigint)/1000), 
+"createdAt"  
+from drive_app."Jobs" 
+where "StoreId" = 1552
+
+
+select st.id,st.code, active, completed, reescheduled,to_timestamp(CAST("created" as bigint)/1000), 
+jb."createdAt"  
+from drive_app."Stores" st join  drive_app."Jobs" jb on st.id = jb."StoreId"  
+where "code" = '4106551'
+
+
+
+select * from  drive_app."Jobs"
+where "StoreId" in 
+('928',
+'906',
+'923',
+'915',
+'1333',
+'926',
+'931',
+'1305',
+'936',
+'1295',
+'1036',
+'1289',
+'1327',
+'1035',
+'1463',
+'1179',
+'1097',
+'922',
+'1613',
+'1098',
+'1185',
+'1184',
+'1309',
+'1462',
+'1181',
+'1034',
+'1616',
+'1612',
+'1614',
+'1621',
+'1296',
+'1615',
+'1617')
+
+
+--------------------------------------------------------------------------------------------------------
+
+select id, "createdAt","updatedAt",accepted, active, completed, "StoreId",
+to_timestamp(CAST("created" as bigint)/1000)
+from drive_app."Jobs" where "StoreId" in (select id from drive_app."Stores" where "code" in
+('100540',
+'102293',
+'102914',
+'112015',
+'136905',
+'144378',
+'182087',
+'204824',
+'205617',
+'304365',
+'304721',
+'319613',
+'415163',
+'1711066',
+'4015139',
+'4027921',
+'4031400',
+'4032530',
+'4039286',
+'4039638',
+'4051640',
+'4052125',
+'4054278',
+'4058312',
+'4110923',
+'4111422',
+'4111875',
+'4112113',
+'4112351',
+'4114651',
+'4114676',
+'4114740',
+'4114782',
+'4115982',
+'4121062',
+'4121064')) 
+and date("createdAt") = date('2020-11-09')
+and accepted is not null
+
+
+select * from drive_app."Stores" where id in(
+1036,
+1098,
+1333,
+1612,
+922,
+1295,
+1289,
+1296,
+906,
+915,
+1034,
+1184,
+1179,
+1185,
+923,
+1181,
+1035,
+1305,
+1462,
+1327)
+
+
+select id, "createdAt","updatedAt",accepted, active, completed, "StoreId",
+to_timestamp(CAST("created" as bigint)/1000)
+
+set "createdAt" = "createdAt" - INTERVAL '1 day', "updatedAt" = "updatedAt"  - INTERVAL '1 day'
+from 
+
+
+select id, "createdAt","updatedAt",accepted, active, completed, "StoreId",
+to_timestamp(CAST("created" as bigint)/1000) from
+drive_app."Jobs"
+
+update 
+drive_app."Jobs"
+set "created" = '1604901600000'
+
+where "StoreId" in (select id from drive_app."Stores" where "code" in
+('100540',
+'102293',
+'102914',
+'112015',
+'136905',
+'144378',
+'182087',
+'204824',
+'205617',
+'304365',
+'304721',
+'319613',
+'415163',
+'1711066',
+'4015139',
+'4027921',
+'4031400',
+'4032530',
+'4039286',
+'4039638',
+'4051640',
+'4052125',
+'4054278',
+'4058312',
+'4110923',
+'4111422',
+'4111875',
+'4112113',
+'4112351',
+'4114651',
+'4114676',
+'4114740',
+'4114782',
+'4115982',
+'4121062',
+'4121064'))
+and date("createdAt") = date('2020-11-09')
+commit
+
+select * from drive_app."Stores" where "code" = '100540'
+
+select * from drive_app."Jobs" where "StoreId" = 928
+
+select to_timestamp(CAST(1604901600000 as bigint)/1000)::timestamp, now()::timestamp
+
+DATE_PART('year', '2012-01-01'::date) 
+
+select * from drive_app."Jobs" where date(to_timestamp(CAST("created" as bigint)/1000)) = date('2020-11-09')
+
+
+update from tbl_tbl 
+"createdAt" = "createdAt" +- INTERVAL 'N day', 
+"updatedAt" = "updatedAt"  +- INTERVAL 'N day',
+extract(epoch from to_timestamp(CAST("created" as bigint)/1000)- INTERVAL '3 day')
+where 1=1
+
+
+select extract(epoch from "createdAt"), "createdAt"
+from drive_app."Jobs"
+where date("createdAt") = date('2020-11-09') 
+
+select to_timestamp(CAST(1604904830000 as bigint)/1000)
+
+select id, "createdAt","updatedAt",accepted, active, completed, "StoreId",
+to_timestamp(CAST("created" as bigint)/1000)
+from drive_app."Jobs" where "StoreId" in (select id from drive_app."Stores" where "code" in
+('4115982',
+'4121062',
+'4121064'))
+
+select * from drive_app."Stores" where "code" in
+('4115982',
+'4121062',
+'4121064')
+
+
+
+
+select "created",to_timestamp(CAST("created" as bigint)/1000),
+to_timestamp(CAST("created" as bigint)/1000) - INTERVAL '1 day' , 
+extract(epoch from to_timestamp(CAST("created" as bigint)/1000)- INTERVAL '3 day'), "createdAt", "updatedAt"
+from  
+
+
+select * from drive_app."Jobs" jb
+where  date(jb."createdAt") = '2020-11-02'
+
+select jb.id, to_timestamp(CAST(jb."created" as bigint)/1000) fecha, 
+jb."createdAt", jb."updatedAt", sc.id, sc."createdAt", sc."updatedAt"
+from drive_app."Jobs" jb join drive_app."vwSchedules" sc on jb."ScheduleId" =  sc.id
+where "id" in 
+('265',
+'223',
+'220',
+'219',
+'273',
+'263',
+'262',
+'295',
+'261',
+'293',
+'210',
+'294',
+'268',
+'211',
+'196',
+'117',
+'194',
+'221',
+'279',
+'193',
+'116',
+'114',
+'230',
+'197',
+'115',
+'212',
+'278',
+'280',
+'276',
+'274',
+'296',
+'275',
+'277')
+
+

@@ -1,0 +1,130 @@
+----seguimiento
+
+select d.*, st.name tienda, em.name pintor, rt.ruta, rt.grupo, 
+jb.id, jb.completed, jb.active
+--case when jb."id" is not null then 'si' else 'no' end Trabajado 
+from (
+select b.id, b.employee, b.schedule, b."storeCode", RANK () OVER ( PARTITION BY employee
+		ORDER BY date("createdAt") DESC
+	) x  from drive_app."Binnacles" b
+where date("createdAt") = date(now())
+) as d join drive_app."Stores" st on d."storeCode" = st.code
+join drive_app."Employees" em on d.employee = em.code 
+left  join drive_app.tbl_rutas rt on d.employee  = rt.gestor 
+left join drive_app."Jobs" jb on d."schedule" = jb."ScheduleId" and st."id" = jb."StoreId" 
+where x =1
+
+
+
+----DATA ILC
+
+select distinct jb."createdAt" Creacion,st."code" CodigoTienda, st."name" NombreTienda, 
+COALESCE(PA.AreaTotal,0) - COALESCE(NPA.NoPintado,0) Pintado, 
+case when COALESCE(PA.AreaTotal,0) - COALESCE(NPA.NoPintado,0) <=28 then 'Cliente dentro del rango autorizado (28 m2)' 
+when COALESCE(PA.AreaTotal,0) - COALESCE(NPA.NoPintado,0) >28 and COALESCE(PA.AreaTotal,0) - COALESCE(NPA.NoPintado,0) <=31
+then 'Cliente excede rango, autorizado por llamada (+3 m2)'
+else 'Cliente excede rango, pendiente autorización' end EstadoImplementacion,
+PA.AreaTotal, NPA.NoPintado, substring(jb."before1",0,32000)bf1a ,substring(jb."before1",32000,32000)bf1b, substring(jb."after1",0,32000)af1a ,substring(jb."after1",32000,32000)af1b,
+substring(jb."accepted",0,32000)acpa ,substring(jb."accepted",32000,32000)acpb
+from drive_app."Stores" St 
+join drive_app."Jobs" jb on st."id" = jb."StoreId"
+left join (select id JobId, "StoreId", sum(cast(base as decimal)* cast(altura as decimal )) as AreaTotal 
+from drive_app."PaintedArea"
+group by "StoreId", id) PA on PA.JobId = jb.id and PA."StoreId" = jb."StoreId"
+left join (select id JobId, "StoreId", sum(cast(base as decimal)* cast(altura as decimal )) as NoPintado 
+from drive_app."NPaintedArea"
+group by "StoreId", id) NPA on PA.JobId = jb.id and PA."StoreId" = jb."StoreId"
+
+-----------------------------
+
+
+
+select * from drive_app."Stores"
+where "code" in ('606492'),
+'4031915',
+'621206',
+'600953',
+'606167')
+
+select * from drive_app."Jobs"
+where "StoreId" = 1055
+
+Select * from  drive_app."Schedules"
+where id = 39
+
+Select * from  drive_app."Teams"
+where id = 9
+
+SELECT distinct jb.id, trim(ST.name) nombre, 
+jb.before1, jb.before2, jb.before3, 
+jb.after1, jb.after2, jb.after3, 
+jb.accepted, case when jb.name = 'TRUE' then 'SI' else 'NO' end NombreP,
+case when jb.name = 'TRUE' then 'SI' else 'NO' end Rot1,case when jb.name = 'TRUE' then 'SI' else 'NO' end Rot4,
+case when jb.name = 'TRUE' then 'SI' else 'NO' end Rot2,case when jb.name = 'TRUE' then 'SI' else 'NO' end Rot5,
+case when jb.name = 'TRUE' then 'SI' else 'NO' end Rot3,case when jb.name = 'TRUE' then 'SI' else 'NO'end Rot6,
+jb.picture1, jb.picture2, jb.picture3, jb.picture4, jb.picture5, jb.picture6,
+jb.comments, jb.active, jb.completed, jb.reescheduled, 
+to_timestamp(CAST("localCreation" as bigint)/1000) fec_llegada, jb."createdAt" fec_cierre, jb."updatedAt" fec_confirma, 
+jb."ScheduleId", jb."StoreId", st.client,st.phone
+	FROM drive_app."Jobs" jb 
+	join drive_app."Stores" st on jb."StoreId" = st.id
+	join drive_app."Binnacles" bn 
+	on jb."StoreId" = st.id and jb."ScheduleId" = bn.schedule
+where jb.completed = 'TRUE'
+
+select * from drive_app."Stores"
+
+
+------------------------------
+
+select id,code, name, scheduled, complete 
+
+select *
+from drive_app."Stores"
+where code ='4110802'
+
+select * from  drive_app."Jobs"
+where "StoreId" = 1211
+
+select * from drive_app."Binnacles"
+
+select * from  drive_app."Schedules" 
+where route->>'code' ='1363'
+
+select * from  drive_app."Schedules" 
+where id = 20
+
+select distinct date(sc."createdAt" - INTERVAL '6 hour') fecha, sc.id, rt.grupo, 
+em.name empleado, codigo codTienda, nombre nomTienda, idStore, active
+from  drive_app."vwSchedules" sc 
+left join drive_app."Jobs" jb on sc.idstore = cast(jb."StoreId" as varchar) 
+and date(jb."createdAt" - INTERVAL '6 hour') = date(now() - INTERVAL '6 hour' )
+join drive_app."Teams" tm on sc."TeamId" = tm.id 
+left join drive_app.tbl_rutas rt on gestor =  tm."EmployeeCode"
+join drive_app."Employees" em on em.code = tm."EmployeeCode"
+where date(sc."createdAt" - INTERVAL '6 hour') = date(now() - INTERVAL '6 hour' )
+order by idstore
+
+select *
+from  drive_app."vwSchedules" sc join drive_app."Jobs" jb on sc.idstore = cast(jb.id as varchar)
+join drive_app."Teams" tm on sc."TeamId" = tm.id 
+join drive_app.tbl_rutas rt on gestor =  tm."EmployeeCode"
+join drive_app."Employees" em on em."TeamId" = tm.id
+
+
+
+select * from drive_app."vwSchedules"
+
+select * from drive_app."Teams"
+
+
+select * from drive_app."Employees"
+
+select * from drive_app.tbl_rutas
+where "codigo" ='4028878'
+
+
+select now(), now()   
+
+
+select * from drive_app."Jobs"
